@@ -40,3 +40,26 @@ ol, ul {
 body {
   background: pink;
 }
+
+.page-content {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+}
+
+/*Board*/
+
+.board {
+  background: red;
+  grid-column: 3 / -3;
+  grid-row: 2 / -2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.square {
+  background: blue;
+}
