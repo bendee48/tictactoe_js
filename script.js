@@ -13,7 +13,13 @@ const gameboard = (() => {
 
 const displayController = (() => {
   const displayBoard = (board, boardElement) => {
-    boardElement.innerHTML = `<div>${board}</div><div>hello</div>`
+    let str = "";
+    board.forEach((row, rowIndex) => {
+      row.forEach((square, sqIndex) => {
+        str += `<div class="square" data-key="${rowIndex}${sqIndex}">${square}</div>`
+      });
+    });
+    boardElement.innerHTML = str;
   }
   
   return {displayBoard}
