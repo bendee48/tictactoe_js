@@ -1,20 +1,40 @@
 console.log('working!')
 
-function player(name) {
-  return { name }
-}
-
 const gameboard = (() => {
-  let board = [['O', 'X', 'O'],['B', 'O', 'X'],['O', 'X', 'O']];
+  let board = [['', '', ''],['', '', ''],['', '', '']];
 
   return { board }
 })()
 
-// Create seperate get squares method maybe in some get stuff module
-const elementSelector = (()=> {
-  const squares = document.querySelectorAll('.square');
+const gameLogic = (() => {
+  const fillSquare = (e) => {
+    let [idx1, idx2] = e.target.dataset.key;
+    gameboard.board[idx1][idx2] = 'Rad!';
+    displayController.displayBoard();
+    //UNCOUPLE DISPLAY FROM HERE MAYBE
+    //ASSIGN THE PLAYER SYMBOL
+    // add check for existing symbol
+  }
 
+  return { fillSquare }
+})()
+
+function player(name) {
+  return { name }
+}
+
+const elementSelector = (() => {
+  const squares = document.querySelectorAll('.square');
+  
   return { squares }
+})()
+
+
+const interactionListener = (() => {
+  // Board squares
+  elementSelector.squares.forEach(square => {
+    square.addEventListener('click', gameLogic.fillSquare);
+  });
 })()
 
 const displayController = (() => {
@@ -26,8 +46,9 @@ const displayController = (() => {
     });
   }
   
-  return {displayBoard}
+  return { displayBoard }
 })()
+
 
 const gameEngine = (() => {
   // Only really want to initalize boards etc once, not in individual functions
@@ -35,17 +56,5 @@ const gameEngine = (() => {
   const boardElement = document.querySelector('.board');
 
   displayController.displayBoard(board, boardElement);
-  
 })()
 
-const interactionListeners = (() => {
-  // Board squares
-  elementSelector.squares.forEach(square => {
-    square.addEventListener('click', doSomething);
-  });
-})()
-
-//messing
-function doSomething(e) {
-  console.log(e.target);
-}
