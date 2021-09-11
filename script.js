@@ -6,22 +6,39 @@ const gameboard = (() => {
   return { board }
 })()
 
+const player = function(name, mark) {
+  return { name, mark }
+}
+ 
+const players = (() => {
+  const player1 = player('Player 1', 'X');
+  const player2 = player('Player 2', 'O');
+  const both = [player1, player2];
+
+  const active = () => {
+    return both[0];
+  }
+
+  const switchPlayer = () => {
+    both.reverse();
+  }
+
+  return { both, player1, player2, active, switchPlayer }
+})()
+
 const gameLogic = (() => {
   const fillSquare = (e) => {
     let [idx1, idx2] = e.target.dataset.key;
     gameboard.board[idx1][idx2] = 'Rad!';
     displayController.displayBoard();
     //UNCOUPLE DISPLAY FROM HERE MAYBE
-    //ASSIGN THE PLAYER SYMBOL
+    //ASSIGN THE PLAYER SYMBOL USING active player
     // add check for existing symbol
   }
 
   return { fillSquare }
 })()
 
-function player(name) {
-  return { name }
-}
 
 const elementSelector = (() => {
   const squares = document.querySelectorAll('.square');
@@ -54,6 +71,7 @@ const gameEngine = (() => {
   // Only really want to initalize boards etc once, not in individual functions
   const board = gameboard.board;
   const boardElement = document.querySelector('.board');
+
 
   displayController.displayBoard(board, boardElement);
 })()
