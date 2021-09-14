@@ -29,11 +29,14 @@ const players = (() => {
 const gameLogic = (() => {
   const fillSquare = (e) => {
     let [idx1, idx2] = e.target.dataset.key;
-    gameboard.board[idx1][idx2] = 'Rad!';
+    if (gameboard.board[idx1][idx2] === '') {
+      gameboard.board[idx1][idx2] = players.active().mark;
+    } else {
+      return;
+    }
+    players.switchPlayer();
     displayController.displayBoard();
     //UNCOUPLE DISPLAY FROM HERE MAYBE
-    //ASSIGN THE PLAYER SYMBOL USING active player
-    // add check for existing symbol
   }
 
   return { fillSquare }
