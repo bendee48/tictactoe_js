@@ -1,5 +1,3 @@
-console.log('working!')
-
 const gameboard = (() => {
   let board = [['', '', ''],['', '', ''],['', '', '']];
 
@@ -36,16 +34,17 @@ const gameLogic = (() => {
       return;
     }
     //MOve to game engine??? Maybe??! YAS DEFINITLEY OR SEPERATE FUNCTION
-    win(coords, players.active().mark)
+    if (win(coords, players.active().mark)) {
+      console.log('WINNER WINNER CHICKEN DINNER!')
+    }
     players.switchPlayer();
     displayController.displayBoard();
     //UNCOUPLE DISPLAY FROM HERE MAYBE
   }
 
   const win = (coords, playerMark) => {
-    // COULD JUST CHECK EVERY ROW AFTER EACH ROUND
-    //CAN SKIP FIRST 4 turns
-    // object showing winning moves from that squae, check those
+    //CAN SKIP FIRST 4 turns save a little time
+    // object showing winning moves from that square, check only those
     const winRows = { '00': [['00', '01', '02'], ['00', '11', '22'], ['00', '10', '20']],
                       '01': [['00', '01', '02'], ['01', '11', '21']],
                       '02': [['00', '01', '02'], ['02', '11', '20'], ['02', '12', '22']],
@@ -57,7 +56,13 @@ const gameLogic = (() => {
                       '22': [['00', '11', '22'], ['20', '21', '22'], ['02', '12', '22']] };
     const board = gameboard.board;
 
-    //CHECK ROWS FOR WINS with playermark and gameboard
+    // Check possible winning rows for active player's mark 
+    return winRows[coords].some(row => {
+      return row.every(coord => {
+        let [idx1, idx2] = coord;
+        return board[idx1][idx2] === playerMark;
+      });
+    });
   }
 
   return { fillSquare, win }
