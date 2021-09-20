@@ -1,3 +1,24 @@
+// Observer pattern to handle changes after event clicks 
+const eventObserver = (() => {
+  let subscriptions = {};
+
+  const subscribe = (sub, func) => {
+    if (subscriptions[sub]) {
+      subscriptions[sub].push(func);
+    } else {
+      subscriptions[sub] = [func];
+    }
+  }
+
+  const run = (sub, ...args) => {
+    subscriptions[sub].forEach(func => {
+      func.call(this, ...args)
+    });
+  }
+
+  return { subscribe, subscriptions, run }
+})()
+
 const gameboard = (() => {
   let board = [['', '', ''],['', '', ''],['', '', '']];
 
@@ -30,19 +51,20 @@ const gameLogic = (() => {
     let [idx1, idx2] = coords;
     if (gameboard.board[idx1][idx2] === '') {
       gameboard.board[idx1][idx2] = players.active().mark;
+      eventObserver.run('check win', coords, players.active().mark)
+      eventObserver.run('update board')
     } else {
       return;
     }
-    //MOve to game engine??? Maybe??! YAS DEFINITLEY OR SEPERATE FUNCTION
-    if (win(coords, players.active().mark)) {
-      console.log('WINNER WINNER CHICKEN DINNER!')
-    }
-    players.switchPlayer();
-    displayController.displayBoard();
-    //UNCOUPLE DISPLAY FROM HERE MAYBE
   }
 
-  const win = (coords, playerMark) => {
+  const hasWon = (coords, playerMark) => {
+    if (checkWin(coords, playerMark)) {
+      displayController.displayWin();
+    }
+  }
+
+  const checkWin = (coords, playerMark) => {
     //CAN SKIP FIRST 4 turns save a little time
     // object showing winning moves from that square, check only those
     const winRows = { '00': [['00', '01', '02'], ['00', '11', '22'], ['00', '10', '20']],
@@ -65,7 +87,7 @@ const gameLogic = (() => {
     });
   }
 
-  return { fillSquare, win }
+  return { fillSquare, hasWon }
 })()
 
 
@@ -92,12 +114,20 @@ const displayController = (() => {
       square.innerHTML = gameboard.board[idx1][idx2];
     });
   }
+
+  const displayWin = () => {
+    console.log('WINNER')
+  }
   
-  return { displayBoard }
+  return { displayBoard, displayWin }
 })()
 
 
 const gameEngine = (() => {
   displayController.displayBoard();
+  eventObserver.subscribe('check win', gameLogic.hasWon) //Check for win after each successful move
+  eventObserver.subscribe('update board', players.switchPlayer); // Switch player after successful move
+  eventObserver.subscribe('update board', displayController.displayBoard) // Re-render board after each turn
 })()
+
 
