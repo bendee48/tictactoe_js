@@ -22,6 +22,20 @@
       <div class="square" data-key="21"></div>
       <div class="square" data-key="22"></div>
     </div>
+    <div class="form-overlay">
+      <form action="" id="playerForm">
+        <input type="text" name="player1" id="player1Name" placeholder="Player 1 name" required></br>
+        <fieldset>
+          <legend>Choose Symbol 'O' or 'X'?</legend>
+          <input type="radio" id="O" name="symbol" required>
+          <label for="O">O</label>
+  
+          <input type="radio" id="X" name="symbol">
+          <label for="X">X</label>
+        </fieldset>
+        <input type="text" name="player2" id="player2Name" placeholder="Player 2 name" required></br>
+        <input type="submit" name="submit" value="Play">
+      </form>
     </div>
   </main>
 <script src="script.js"></script>

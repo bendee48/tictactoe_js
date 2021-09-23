@@ -63,3 +63,23 @@ body {
 .square {
   background: blue;
 }
+
+/* Form */
+
+.form-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  background: rgba(146, 95, 95, 0.5);
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.form-overlay > form {
+  background: green;
+  padding: 6rem;
+}
