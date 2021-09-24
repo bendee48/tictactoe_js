@@ -33,9 +33,29 @@ const createPlayer = function({ name, symbol }) {
 }
  
 const players = (() => {
-  let player1 = createPlayer({name: 'Player 1', symbol: 'X'});
-  let player2 = createPlayer({ name: 'Player 2', symbol: 'O'});
-  let both = [player1, player2];
+  let player1;
+  let player2;
+  let both;
+  
+  const setPlayer1 = ({name, symbol}) => { 
+    player1 = createPlayer({name, symbol});
+  }
+
+  const setPlayer2 = ({name, symbol}) => { 
+    player2 = createPlayer({name, symbol});
+  }
+
+  const getPlayer1 = () => {
+    return player1;
+  }
+
+  const getPlayer2 = () => {
+    return player2;
+  }
+
+  const setBothPlayers = () => {
+    return both = [player1, player2];
+  }
 
   const active = () => {
     return both[0];
@@ -45,15 +65,15 @@ const players = (() => {
     both.reverse();
   }
 
-  return { player1, player2, active, switchPlayer }
+  return { getPlayer1, setPlayer1, setPlayer2, getPlayer2, active, switchPlayer, setBothPlayers }
 })()
 
 const gameSetup = (() => {
   const savePlayers = (e) => {
     e.preventDefault();
     const data = new FormData(e.target);
+    // IMPLEMENT FUNCTION STUFF 
   }
-  // IMPLEMENT FUNCTION STUFF 
   return { savePlayers }
 })();
 
@@ -145,6 +165,11 @@ const gameEngine = (() => {
   eventObserver.subscribe('check win', gameLogic.hasWon) //Check for win after each successful move
   eventObserver.subscribe('update board', players.switchPlayer); // Switch player after successful move
   eventObserver.subscribe('update board', displayController.displayBoard) // Re-render board after each turn
+  
+  //  TESTING
+  players.setPlayer1({name: 'Ben', symbol: 'X'})
+  players.setPlayer2({name: 'Emma', symbol: 'O'})
+  players.setBothPlayers();
 })()
 
 
