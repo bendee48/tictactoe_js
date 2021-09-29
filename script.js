@@ -72,8 +72,15 @@ const gameSetup = (() => {
   const savePlayers = (e) => {
     e.preventDefault();
     const data = new FormData(e.target);
-    // IMPLEMENT FUNCTION STUFF 
+    players.setPlayer1({name: data.get('player1'), symbol: data.get('symbol')});
+    let player2Sym = data.get('symbol') === 'O' ? 'X' : 'O';
+    players.setPlayer2({name: data.get('player2'), symbol: player2Sym});
+    players.setBothPlayers()
+    // Decouple ??
+    elementSelector.playerForm.reset;
+    elementSelector.formOverlay.classList.add('close-form');
   }
+
   return { savePlayers }
 })();
 
@@ -127,8 +134,9 @@ const gameLogic = (() => {
 const elementSelector = (() => {
   const squares = document.querySelectorAll('.square');
   const playerForm = document.querySelector('#playerForm');
+  const formOverlay = document.querySelector('.form-overlay');
   
-  return { squares, playerForm }
+  return { squares, playerForm, formOverlay }
 })()
 
 
@@ -138,6 +146,7 @@ const interactionListener = (() => {
     square.addEventListener('click', gameLogic.fillSquare);
   });
 
+  // Player Form Submit
   elementSelector.playerForm.addEventListener('submit', gameSetup.savePlayers);
 })()
 
@@ -167,9 +176,9 @@ const gameEngine = (() => {
   eventObserver.subscribe('update board', displayController.displayBoard) // Re-render board after each turn
   
   //  TESTING
-  players.setPlayer1({name: 'Ben', symbol: 'X'})
-  players.setPlayer2({name: 'Emma', symbol: 'O'})
-  players.setBothPlayers();
+  // players.setPlayer1({name: 'Ben', symbol: 'X'})
+  // players.setPlayer2({name: 'Emma', symbol: 'O'})
+  // players.setBothPlayers();
 })()
 
 
