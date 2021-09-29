@@ -87,3 +87,31 @@ body {
   background: green;
   padding: 6rem;
 }
+
+/* Win Overlay */
+
+.win-overlay {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  background: rgba(146, 95, 95, 0.5);
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.open-win-overlay {
+  display: flex;
+}
+
+.win-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60%;
+  width: 60%;
+  background-color: blue;
+}

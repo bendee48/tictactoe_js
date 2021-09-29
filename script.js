@@ -127,7 +127,11 @@ const gameLogic = (() => {
     });
   }
 
-  return { fillSquare, hasWon }
+  const playAgain = () => {
+    location.reload();
+  }
+
+  return { fillSquare, hasWon, playAgain }
 })()
 
 
@@ -135,8 +139,10 @@ const elementSelector = (() => {
   const squares = document.querySelectorAll('.square');
   const playerForm = document.querySelector('#playerForm');
   const formOverlay = document.querySelector('.form-overlay');
+  const winOverlay = document.querySelector('.win-overlay');
+  const playBtn = document.querySelector('#play-btn');
   
-  return { squares, playerForm, formOverlay }
+  return { squares, playerForm, formOverlay, winOverlay, playBtn }
 })()
 
 
@@ -148,6 +154,9 @@ const interactionListener = (() => {
 
   // Player Form Submit
   elementSelector.playerForm.addEventListener('submit', gameSetup.savePlayers);
+
+  // Play Again Btn
+  elementSelector.playBtn.addEventListener('click', gameLogic.playAgain);
 })()
 
 const displayController = (() => {
@@ -161,7 +170,7 @@ const displayController = (() => {
   }
 
   const displayWin = () => {
-    console.log('WINNER')
+    elementSelector.winOverlay.classList.add('open-win-overlay');
   }
   
   return { displayBoard, displayWin }
