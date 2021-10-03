@@ -39,6 +39,7 @@ ol, ul {
 
 body {
   background: pink;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .page-content {
@@ -48,11 +49,37 @@ body {
   grid-template-rows: repeat(10, 1fr);
 }
 
+/* Header */
+
+.page-header {
+  grid-column: 1 / -1;
+  border: 1px solid black;
+  text-align: center;
+}
+
+header > h1 {
+  font-size: 2rem;
+}
+
+/* Player Info */
+
+.player-info {
+  background: chartreuse;
+}
+
+.player1-info {
+  grid-column: 1 / 4;
+}
+
+.player2-info {
+  grid-column: 8 / -1;
+}
+
 /*Board*/
 
 .board {
   background: red;
-  grid-column: 3 / -3;
+  grid-column: 4 / -4;
   grid-row: 2 / -2;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -61,13 +88,17 @@ body {
 }
 
 .square {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: blue;
+  font-size: 5em;
 }
 
 /* Form */
 
 .form-overlay {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   position: fixed;
@@ -114,4 +145,19 @@ body {
   height: 60%;
   width: 60%;
   background-color: blue;
+}
+
+/* Meida Queries */
+
+@media (max-width: 900px) {
+  .board {
+    grid-column: 2 / -2;
+  }
+  /* WEIRD SQUARE SIZING NEED TO FIX */
+}
+
+@media (max-width: 500px) {
+  .board {
+    grid-row: 3 / -3;
+  }
 }

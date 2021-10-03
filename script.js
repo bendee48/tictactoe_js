@@ -185,9 +185,9 @@ const gameEngine = (() => {
   eventObserver.subscribe('update board', displayController.displayBoard) // Re-render board after each turn
   
   //  TESTING
-  // players.setPlayer1({name: 'Ben', symbol: 'X'})
-  // players.setPlayer2({name: 'Emma', symbol: 'O'})
-  // players.setBothPlayers();
+  players.setPlayer1({name: 'Ben', symbol: 'X'})
+  players.setPlayer2({name: 'Emma', symbol: 'O'})
+  players.setBothPlayers();
 })()
 
 
