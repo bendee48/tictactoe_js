@@ -25,7 +25,11 @@ const gameboard = (() => {
   const getBoard = () => {
     return board;
   }
-  return { getBoard }
+
+  const resetBoard = () => {
+    board = [['', '', ''],['', '', ''],['', '', '']];
+  }
+  return { getBoard, resetBoard }
 })()
 
 const createPlayer = function({ name, symbol }) {
@@ -135,7 +139,14 @@ const gameLogic = (() => {
     location.reload();
   }
 
-  return { fillSquare, hasWon, playAgain }
+  const rematch = () => {
+    gameboard.resetBoard();
+    // Uncouple maybe?
+    displayController.displayBoard();
+    elementSelector.winOverlay.classList.remove('open-win-overlay');
+  }
+
+  return { fillSquare, hasWon, playAgain, rematch }
 })()
 
 
@@ -145,11 +156,12 @@ const elementSelector = (() => {
   const formOverlay = document.querySelector('.form-overlay');
   const winOverlay = document.querySelector('.win-overlay');
   const playBtn = document.querySelector('#play-btn');
+  const rematchBtn = document.querySelector('#rematch-btn');
   const player1Info = document.querySelector('.player1-info');
   const player2Info = document.querySelector('.player2-info');
   const winText = document.querySelector('.win-text');
   
-  return { squares, playerForm, formOverlay, winOverlay, playBtn, player1Info, player2Info, winText }
+  return { squares, playerForm, formOverlay, winOverlay, playBtn, player1Info, player2Info, winText, rematchBtn }
 })()
 
 
@@ -164,6 +176,9 @@ const interactionListener = (() => {
 
   // Play Again Btn
   elementSelector.playBtn.addEventListener('click', gameLogic.playAgain);
+
+  // Rematch Btn
+  elementSelector.rematchBtn.addEventListener('click', gameLogic.rematch);
 })()
 
 const displayController = (() => {
