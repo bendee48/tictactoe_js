@@ -77,6 +77,10 @@ const gameSetup = (() => {
     players.setPlayer2({name: data.get('player2'), symbol: player2Sym});
     players.setBothPlayers()
     // Decouple ??
+    elementSelector.player1Info.innerHTML = 
+      `<p>${players.getPlayer1().name}</p><p>${players.getPlayer1().symbol}</p>`
+    elementSelector.player2Info.innerHTML = 
+      `<p>${players.getPlayer2().name}</p><p>${players.getPlayer2().symbol}</p>`
     elementSelector.playerForm.reset;
     elementSelector.formOverlay.classList.add('close-form');
   }
@@ -141,8 +145,11 @@ const elementSelector = (() => {
   const formOverlay = document.querySelector('.form-overlay');
   const winOverlay = document.querySelector('.win-overlay');
   const playBtn = document.querySelector('#play-btn');
+  const player1Info = document.querySelector('.player1-info');
+  const player2Info = document.querySelector('.player2-info');
+  const winText = document.querySelector('.win-text');
   
-  return { squares, playerForm, formOverlay, winOverlay, playBtn }
+  return { squares, playerForm, formOverlay, winOverlay, playBtn, player1Info, player2Info, winText }
 })()
 
 
@@ -171,6 +178,7 @@ const displayController = (() => {
 
   const displayWin = () => {
     elementSelector.winOverlay.classList.add('open-win-overlay');
+    elementSelector.winText.innerHTML = `YOU WIN ${players.active().name}`;
   }
   
   return { displayBoard, displayWin }

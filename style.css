@@ -98,7 +98,7 @@ header > h1 {
 /* Form */
 
 .form-overlay {
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   position: fixed;
