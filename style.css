@@ -49,6 +49,13 @@ body {
   grid-template-rows: repeat(10, 1fr);
 }
 
+.btn {
+  padding: 0.5rem 3rem;
+  border-radius: 3px;
+  color: white;
+  background: #000;
+}
+
 /* Header */
 
 .page-header {
@@ -102,7 +109,7 @@ header > h1 {
   align-items: center;
   justify-content: center;
   position: fixed;
-  background: rgba(146, 95, 95, 0.5);
+  background: rgba(56, 56, 56, 0.9);
   top: 0;
   bottom: 0;
   right: 0;
@@ -115,9 +122,35 @@ header > h1 {
 }
 
 .form-overlay > form {
-  background: green;
-  padding: 6rem;
+  background: rgb(255, 144, 17);
+  border-radius: 4px;
+  text-align: center;
+  box-shadow: 2px 2px 8px 2px rgba(0, 0, 0, 0.5);
+  padding: 5rem;
 }
+
+form input {
+  border: none;
+  outline: none;
+  margin-bottom: 1rem;
+}
+
+form legend {
+  font-size: 0.8rem;
+}
+
+form input[type="text"] {
+  padding: .5rem;
+  border-radius: 3px;
+}
+
+form input:focus {
+  box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.4);
+}
+
+form input[type="submit"] {
+  margin-top: 1rem;
+} 
 
 /* Win Overlay */
 
