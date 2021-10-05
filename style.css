@@ -37,8 +37,12 @@ ol, ul {
 
 /* Main Styling */
 
+:root {
+  --orange: rgb(255, 144, 17);
+}
+
 body {
-  background: pink;
+  background: rgb(253, 225, 201);
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
@@ -61,11 +65,14 @@ body {
 .page-header {
   grid-column: 1 / -1;
   border: 1px solid black;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 header > h1 {
-  font-size: 2rem;
+  font-size: 3rem;
+  font-weight: 700;
 }
 
 /* Player Info */
@@ -85,7 +92,7 @@ header > h1 {
 /*Board*/
 
 .board {
-  background: red;
+  background: #000;
   grid-column: 4 / -4;
   grid-row: 2 / -2;
   display: grid;
@@ -98,14 +105,18 @@ header > h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: blue;
+  background: var(--orange);
   font-size: 5em;
+}
+
+.square:hover {
+  background: rgba(255, 133, 33, 0.7);
 }
 
 /* Form */
 
 .form-overlay {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   position: fixed;
