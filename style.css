@@ -78,7 +78,9 @@ header > h1 {
 /* Player Info */
 
 .player-info {
-  background: chartreuse;
+  font-size: 3rem;
+  text-align: center;
+  margin-top: 1rem;
 }
 
 .player1-info {
@@ -87,6 +89,10 @@ header > h1 {
 
 .player2-info {
   grid-column: 8 / -1;
+}
+
+.active-player {
+  background: red;
 }
 
 /*Board*/

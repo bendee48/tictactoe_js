@@ -32,8 +32,8 @@ const gameboard = (() => {
   return { getBoard, resetBoard }
 })()
 
-const createPlayer = function({ name, symbol }) {
-  return { name, symbol }
+const createPlayer = function({ name, symbol, number }) {
+  return { name, symbol, number }
 }
  
 const players = (() => {
@@ -42,11 +42,11 @@ const players = (() => {
   let both;
   
   const setPlayer1 = ({name, symbol}) => { 
-    player1 = createPlayer({name, symbol});
+    player1 = createPlayer({name, symbol, number: 1});
   }
 
   const setPlayer2 = ({name, symbol}) => { 
-    player2 = createPlayer({name, symbol});
+    player2 = createPlayer({name, symbol, number: 2});
   }
 
   const getPlayer1 = () => {
@@ -82,9 +82,9 @@ const gameSetup = (() => {
     players.setBothPlayers()
     // Decouple ??
     elementSelector.player1Info.innerHTML = 
-      `<p>${players.getPlayer1().name}</p><p>${players.getPlayer1().symbol}</p>`
+      `<p class="player1-name">${players.getPlayer1().name}</p><p class="player1-symbol">${players.getPlayer1().symbol}</p>`
     elementSelector.player2Info.innerHTML = 
-      `<p>${players.getPlayer2().name}</p><p>${players.getPlayer2().symbol}</p>`
+      `<p class="player2-name">${players.getPlayer2().name}</p><p class="player2-symbol">${players.getPlayer2().symbol}</p>`
     elementSelector.playerForm.reset;
     elementSelector.formOverlay.classList.add('close-form');
   }
@@ -93,6 +93,8 @@ const gameSetup = (() => {
 })();
 
 const gameLogic = (() => {
+  let turns = 0;
+
   const fillSquare = (e) => {
     const coords = e.target.dataset.key;
     let [idx1, idx2] = coords;
@@ -101,9 +103,23 @@ const gameLogic = (() => {
       // Run functions signed up to Check win and Update Board
       eventObserver.run('check win', coords, players.active().symbol)
       eventObserver.run('update board')
+      addToTurn();
+      // UNCOUPLE
+      console.log(turns)
+      if (isDraw()) {
+        displayController.displayDraw();
+      }
     } else {
       return;
     }
+  }
+
+  const addToTurn = () => {
+    turns++;
+  }
+
+  const isDraw = () => {
+    return turns >= 9;
   }
 
   const hasWon = (coords, playerSymbol) => {
@@ -142,11 +158,12 @@ const gameLogic = (() => {
   const rematch = () => {
     gameboard.resetBoard();
     // Uncouple maybe?
+    turns = 0;
     displayController.displayBoard();
     elementSelector.winOverlay.classList.remove('open-win-overlay');
   }
 
-  return { fillSquare, hasWon, playAgain, rematch }
+  return { fillSquare, hasWon, playAgain, rematch, isDraw }
 })()
 
 
@@ -160,8 +177,11 @@ const elementSelector = (() => {
   const player1Info = document.querySelector('.player1-info');
   const player2Info = document.querySelector('.player2-info');
   const winText = document.querySelector('.win-text');
+  const player1Name = document.querySelector('.player1-name');
+  const player2Name = document.querySelector('.player2-name');
   
-  return { squares, playerForm, formOverlay, winOverlay, playBtn, player1Info, player2Info, winText, rematchBtn }
+  return { squares, playerForm, formOverlay, winOverlay, playBtn, player1Info,
+           player2Info, winText, rematchBtn, player1Name, player2Name }
 })()
 
 
@@ -195,8 +215,14 @@ const displayController = (() => {
     elementSelector.winOverlay.classList.add('open-win-overlay');
     elementSelector.winText.innerHTML = `YOU WIN ${players.active().name}`;
   }
+
+  // CHANGE TO JUST CHANGE TEXT
+  const displayDraw = () => {
+    elementSelector.winOverlay.classList.add('open-win-overlay');
+    elementSelector.winText.innerHTML = `It was a draw!`;
+  }
   
-  return { displayBoard, displayWin }
+  return { displayBoard, displayWin, displayDraw }
 })()
 
 
@@ -215,4 +241,4 @@ const gameEngine = (() => {
 
 
 // ADD active player signifier on display
-// ADD logic for draw
+// ADD logic for draw UNCOUPLE STUFF
