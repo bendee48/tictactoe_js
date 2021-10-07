@@ -87,6 +87,7 @@ const gameSetup = (() => {
       `<p class="player2-name">${players.getPlayer2().name}</p><p class="player2-symbol">${players.getPlayer2().symbol}</p>`
     elementSelector.playerForm.reset;
     elementSelector.formOverlay.classList.add('close-form');
+    displayController.activePlayer(); //Set active player at start
   }
 
   return { savePlayers }
@@ -103,9 +104,8 @@ const gameLogic = (() => {
       // Run functions signed up to Check win and Update Board
       eventObserver.run('check win', coords, players.active().symbol)
       eventObserver.run('update board')
-      addToTurn();
-      displayController.activePlayer()
       // UNCOUPLE
+      addToTurn();
       console.log(turns)
       if (isDraw()) {
         displayController.displayDraw();
@@ -178,8 +178,8 @@ const elementSelector = (() => {
   const player1Info = document.querySelector('.player1-info');
   const player2Info = document.querySelector('.player2-info');
   const winText = document.querySelector('.win-text');
-  const player1Name = document.querySelector('.player1-name');
-  const player2Name = document.querySelector('.player2-name');
+  let player1Name;
+  let player2Name;
   
   return { squares, playerForm, formOverlay, winOverlay, playBtn, player1Info,
            player2Info, winText, rematchBtn, player1Name, player2Name }
@@ -224,6 +224,9 @@ const displayController = (() => {
   }
 
   const activePlayer = () => {
+    elementSelector.player1Name = document.querySelector('.player1-name');
+    elementSelector.player2Name = document.querySelector('.player2-name');
+
     if (players.active().number === 1) {
       elementSelector.player1Name.classList.add('active-player');
       elementSelector.player2Name.classList.remove('active-player');
@@ -238,18 +241,18 @@ const displayController = (() => {
 
 
 const gameEngine = (() => {
-  displayController.displayBoard();
   // Subscribe functions to Event Observer to be run later
   eventObserver.subscribe('check win', gameLogic.hasWon) //Check for win after each successful move
   eventObserver.subscribe('update board', players.switchPlayer); // Switch player after successful move
+  eventObserver.subscribe('update board', displayController.activePlayer) // Show active player
   eventObserver.subscribe('update board', displayController.displayBoard) // Re-render board after each turn
   
   //  TESTING
-  players.setPlayer1({name: 'Ben', symbol: 'X'})
-  players.setPlayer2({name: 'Emma', symbol: 'O'})
-  players.setBothPlayers();
-
-  displayController.activePlayer()
+  // players.setPlayer1({name: 'Ben', symbol: 'X'})
+  // players.setPlayer2({name: 'Emma', symbol: 'O'})
+  // players.setBothPlayers();
+  
+  displayController.displayBoard();
 })()
 
 
