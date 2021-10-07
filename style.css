@@ -39,6 +39,7 @@ ol, ul {
 
 :root {
   --orange: rgb(255, 144, 17);
+  --bright-orange: rgb(255, 90, 13);
 }
 
 body {
@@ -57,17 +58,24 @@ body {
   padding: 0.5rem 3rem;
   border-radius: 3px;
   color: white;
+  border: none;
+  outline: none;
   background: #000;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: rgb(39, 39, 39);
 }
 
 /* Header */
 
 .page-header {
   grid-column: 1 / -1;
-  border: 1px solid black;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 1rem 0;
 }
 
 header > h1 {
@@ -115,7 +123,7 @@ header > h1 {
 }
 
 .active-player {
-  background: rgb(255, 90, 13);
+  background: var(--bright-orange);
 }
 
 /*Board*/
@@ -142,10 +150,10 @@ header > h1 {
   background: rgba(255, 133, 33, 0.7);
 }
 
-/* Form */
+/* Player Form */
 
 .form-overlay {
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   position: fixed;
@@ -162,7 +170,7 @@ header > h1 {
 }
 
 .form-overlay > form {
-  background: rgb(255, 144, 17);
+  background: var(--orange);
   border-radius: 4px;
   text-align: center;
   box-shadow: 2px 2px 8px 2px rgba(0, 0, 0, 0.5);
@@ -192,9 +200,9 @@ form input[type="submit"] {
   margin-top: 1rem;
 } 
 
-/* Win Overlay */
+/* Endgame Overlay */
 
-.win-overlay {
+.endgame-overlay {
   display: none;
   align-items: center;
   justify-content: center;
@@ -207,17 +215,25 @@ form input[type="submit"] {
   z-index: 1;
 }
 
-.open-win-overlay {
+.open-endgame-overlay {
   display: flex;
 }
 
-.win-box {
+.endgame-box {
+  background-color: var(--bright-orange);
+  box-shadow: 4px 4px 4px 4px rgb(0, 0, 0, 0.2);
   display: flex;
+  flex-flow: column;
+  gap: 2rem;
+  border-radius: 5px;
   justify-content: center;
   align-items: center;
-  height: 60%;
-  width: 60%;
-  background-color: blue;
+  padding: 5rem;
+}
+
+.endgame-text {
+  text-align: center;
+  font-size: 2rem;
 }
 
 /* Meida Queries */

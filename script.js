@@ -108,7 +108,7 @@ const gameLogic = (() => {
       addToTurn();
       console.log(turns)
       if (isDraw()) {
-        displayController.displayDraw();
+        displayController.displayEndGame("It was a draw");
       }
     } else {
       return;
@@ -125,7 +125,8 @@ const gameLogic = (() => {
 
   const hasWon = (coords, playerSymbol) => {
     if (checkWin(coords, playerSymbol)) {
-      displayController.displayWin();
+      turns = 0; // Reset so as to not also trigger draw
+      displayController.displayEndGame("Congratulations! You win ", players.active().name);
     }
   }
 
@@ -161,7 +162,7 @@ const gameLogic = (() => {
     // Uncouple maybe?
     turns = 0;
     displayController.displayBoard();
-    elementSelector.winOverlay.classList.remove('open-win-overlay');
+    elementSelector.endgameOverlay.classList.remove('open-endgame-overlay');
   }
 
   return { fillSquare, hasWon, playAgain, rematch, isDraw }
@@ -172,17 +173,17 @@ const elementSelector = (() => {
   const squares = document.querySelectorAll('.square');
   const playerForm = document.querySelector('#playerForm');
   const formOverlay = document.querySelector('.form-overlay');
-  const winOverlay = document.querySelector('.win-overlay');
+  const endgameOverlay = document.querySelector('.endgame-overlay');
   const playBtn = document.querySelector('#play-btn');
   const rematchBtn = document.querySelector('#rematch-btn');
   const player1Info = document.querySelector('.player1-info');
   const player2Info = document.querySelector('.player2-info');
-  const winText = document.querySelector('.win-text');
+  const endgameText = document.querySelector('.endgame-text');
   let player1Name;
   let player2Name;
   
-  return { squares, playerForm, formOverlay, winOverlay, playBtn, player1Info,
-           player2Info, winText, rematchBtn, player1Name, player2Name }
+  return { squares, playerForm, formOverlay, endgameOverlay, playBtn, player1Info,
+           player2Info, endgameText, rematchBtn, player1Name, player2Name }
 })()
 
 
@@ -212,15 +213,9 @@ const displayController = (() => {
     });
   }
 
-  const displayWin = () => {
-    elementSelector.winOverlay.classList.add('open-win-overlay');
-    elementSelector.winText.innerHTML = `YOU WIN ${players.active().name}`;
-  }
-
-  // CHANGE TO JUST CHANGE TEXT
-  const displayDraw = () => {
-    elementSelector.winOverlay.classList.add('open-win-overlay');
-    elementSelector.winText.innerHTML = `It was a draw!`;
+  const displayEndGame = (text, player) => {
+    elementSelector.endgameOverlay.classList.add('open-endgame-overlay');
+    elementSelector.endgameText.innerHTML = `${text} ${player || ""}`;
   }
 
   const activePlayer = () => {
@@ -236,7 +231,7 @@ const displayController = (() => {
     }
   }
   
-  return { displayBoard, displayWin, displayDraw, activePlayer }
+  return { displayBoard, displayEndGame, activePlayer }
 })()
 
 
@@ -257,9 +252,6 @@ const gameEngine = (() => {
   displayController.displayBoard();
 })()
 
-
-
-
-
-// ADD active player animation
 // UNCOUPLE STUFF
+// ADD AI
+// CLEAN UP MOBILE VIEW

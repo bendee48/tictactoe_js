@@ -35,21 +35,21 @@
         <input type="text" name="player1" id="player1Name" placeholder="Player 1 name" required></br>
         <fieldset>
           <legend>Choose Symbol</legend>
-          <input type="radio" id="O" name="symbol" value="O" required>
-          <label for="O">O</label>
-  
           <input type="radio" id="X" name="symbol" value="X">
           <label for="X">X</label>
+
+          <input type="radio" id="O" name="symbol" value="O" required>
+          <label for="O">O</label>
         </fieldset>
         <input type="text" name="player2" id="player2Name" placeholder="Player 2 name" required></br>
         <input type="submit" name="submit" value="Play" class="btn">
       </form>
     </div>
-    <div class="win-overlay">
-      <div class="win-box">
-        <div class="win-text"></div>
-        <button id="play-btn">Start Again</button>
-        <button id="rematch-btn">Rematch?</button>
+    <div class="endgame-overlay">
+      <div class="endgame-box">
+        <p class="endgame-text"></p>
+        <button class="btn" id="rematch-btn">Rematch?</button>
+        <button class="btn" id="play-btn">Start Again</button>
       </div>
     </div>
   </main>
