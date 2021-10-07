@@ -104,6 +104,7 @@ const gameLogic = (() => {
       eventObserver.run('check win', coords, players.active().symbol)
       eventObserver.run('update board')
       addToTurn();
+      displayController.activePlayer()
       // UNCOUPLE
       console.log(turns)
       if (isDraw()) {
@@ -221,8 +222,18 @@ const displayController = (() => {
     elementSelector.winOverlay.classList.add('open-win-overlay');
     elementSelector.winText.innerHTML = `It was a draw!`;
   }
+
+  const activePlayer = () => {
+    if (players.active().number === 1) {
+      elementSelector.player1Name.classList.add('active-player');
+      elementSelector.player2Name.classList.remove('active-player');
+    } else {
+      elementSelector.player2Name.classList.add('active-player');
+      elementSelector.player1Name.classList.remove('active-player');
+    }
+  }
   
-  return { displayBoard, displayWin, displayDraw }
+  return { displayBoard, displayWin, displayDraw, activePlayer }
 })()
 
 
@@ -237,8 +248,13 @@ const gameEngine = (() => {
   players.setPlayer1({name: 'Ben', symbol: 'X'})
   players.setPlayer2({name: 'Emma', symbol: 'O'})
   players.setBothPlayers();
+
+  displayController.activePlayer()
 })()
 
 
-// ADD active player signifier on display
+
+
+
+// ADD active player signifier on display method that's just constantly checking
 // ADD logic for draw UNCOUPLE STUFF
