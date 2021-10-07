@@ -91,8 +91,31 @@ header > h1 {
   grid-column: 8 / -1;
 }
 
+.player-info p:first-child {
+  display: inline-block;
+  padding: .5rem .8rem;
+  border-radius: 5px;
+}
+
+.player-info p:last-child {
+  font-size: 7rem;
+}
+
+.player-info p.active-player + p {
+  animation-duration: 1.5s;
+  animation-name: shakeit;
+  animation-iteration-count: infinite;
+  animation-timing-function: cubic-bezier(0.5, 0.8, 0.355, 1);
+}
+
+@keyframes shakeit {
+  to {
+    transform: scale(0.9);
+  }
+}
+
 .active-player {
-  background: red;
+  background: rgb(255, 90, 13);
 }
 
 /*Board*/
@@ -122,7 +145,7 @@ header > h1 {
 /* Form */
 
 .form-overlay {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   position: fixed;
