@@ -79,12 +79,8 @@ const gameSetup = (() => {
     players.setPlayer1({name: data.get('player1'), symbol: data.get('symbol')});
     let player2Sym = data.get('symbol') === 'O' ? 'X' : 'O';
     players.setPlayer2({name: data.get('player2'), symbol: player2Sym});
-    players.setBothPlayers()
-    // Decouple ??
-    elementSelector.player1Info.innerHTML = 
-      `<p class="player1-name">${players.getPlayer1().name}</p><p class="player1-symbol">${players.getPlayer1().symbol}</p>`
-    elementSelector.player2Info.innerHTML = 
-      `<p class="player2-name">${players.getPlayer2().name}</p><p class="player2-symbol">${players.getPlayer2().symbol}</p>`
+    players.setBothPlayers();
+    eventObserver.run('players set'); // Run functions attached to players being set
     elementSelector.playerForm.reset;
     elementSelector.formOverlay.classList.add('close-form');
     displayController.activePlayer(); //Set active player at start
@@ -101,15 +97,12 @@ const gameLogic = (() => {
     let [idx1, idx2] = coords;
     if (gameboard.getBoard()[idx1][idx2] === '') {
       gameboard.getBoard()[idx1][idx2] = players.active().symbol;
-      // Run functions signed up to Check win and Update Board
-      eventObserver.run('check win', coords, players.active().symbol)
-      eventObserver.run('update board')
-      // UNCOUPLE
       addToTurn();
-      console.log(turns)
-      if (isDraw()) {
-        displayController.displayEndGame("It was a draw");
-      }
+      // Run functions signed up to Check win, Check Draw and Update Board
+      // Save a little time (don't need to check win before 5 moves)
+      if (turns > 4) eventObserver.run('check win', coords, players.active().symbol);
+      eventObserver.run('update board');
+      eventObserver.run('check draw');
     } else {
       return;
     }
@@ -117,10 +110,15 @@ const gameLogic = (() => {
 
   const addToTurn = () => {
     turns++;
+    console.log(turns)
   }
 
   const isDraw = () => {
     return turns >= 9;
+  }
+
+  const hasDrawn = () => {
+    if (isDraw()) displayController.displayEndGame("It was a draw.");
   }
 
   const hasWon = (coords, playerSymbol) => {
@@ -131,7 +129,6 @@ const gameLogic = (() => {
   }
 
   const checkWin = (coords, playerSymbol) => {
-    //CAN SKIP FIRST 4 turns save a little time
     // object showing winning moves from that square, check only those
     const winRows = { '00': [['00', '01', '02'], ['00', '11', '22'], ['00', '10', '20']],
                       '01': [['00', '01', '02'], ['01', '11', '21']],
@@ -159,13 +156,12 @@ const gameLogic = (() => {
 
   const rematch = () => {
     gameboard.resetBoard();
-    // Uncouple maybe?
     turns = 0;
     displayController.displayBoard();
     elementSelector.endgameOverlay.classList.remove('open-endgame-overlay');
   }
 
-  return { fillSquare, hasWon, playAgain, rematch, isDraw }
+  return { fillSquare, hasWon, newGame, rematch, isDraw, hasDrawn }
 })()
 
 
@@ -230,17 +226,26 @@ const displayController = (() => {
       elementSelector.player1Name.classList.remove('active-player');
     }
   }
+
+  const displayPlayerInfo = () => {
+    elementSelector.player1Info.innerHTML = 
+      `<p class="player1-name">${players.getPlayer1().name}</p><p class="player1-symbol">${players.getPlayer1().symbol}</p>`
+    elementSelector.player2Info.innerHTML = 
+      `<p class="player2-name">${players.getPlayer2().name}</p><p class="player2-symbol">${players.getPlayer2().symbol}</p>`
+  }
   
-  return { displayBoard, displayEndGame, activePlayer }
+  return { displayBoard, displayEndGame, activePlayer, displayPlayerInfo }
 })()
 
 
 const gameEngine = (() => {
   // Subscribe functions to Event Observer to be run later
   eventObserver.subscribe('check win', gameLogic.hasWon) //Check for win after each successful move
+  eventObserver.subscribe('check draw', gameLogic.hasDrawn) // Check for draw and display endgame
   eventObserver.subscribe('update board', players.switchPlayer); // Switch player after successful move
   eventObserver.subscribe('update board', displayController.activePlayer) // Show active player
   eventObserver.subscribe('update board', displayController.displayBoard) // Re-render board after each turn
+  eventObserver.subscribe('players set', displayController.displayPlayerInfo) // Display plyer once player's are set
   
   //  TESTING
   players.setPlayer1({name: 'Ben', symbol: 'X'})
