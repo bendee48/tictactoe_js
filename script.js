@@ -153,7 +153,7 @@ const gameLogic = (() => {
     });
   }
 
-  const playAgain = () => {
+  const newGame = () => {
     location.reload();
   }
 
@@ -197,7 +197,7 @@ const interactionListener = (() => {
   elementSelector.playerForm.addEventListener('submit', gameSetup.savePlayers);
 
   // Play Again Btn
-  elementSelector.playBtn.addEventListener('click', gameLogic.playAgain);
+  elementSelector.playBtn.addEventListener('click', gameLogic.newGame);
 
   // Rematch Btn
   elementSelector.rematchBtn.addEventListener('click', gameLogic.rematch);
