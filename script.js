@@ -200,9 +200,8 @@ const interactionListener = (() => {
 })()
 
 const displayController = (() => {
-  //initialize save board here?? MEMOMIZE BABAY
   const displayBoard = () => {
-    const squares = elementSelector.squares
+    const squares = elementSelector.squares;
     squares.forEach(square => {
       let [idx1, idx2] = square.dataset.key.split('');
       square.innerHTML = gameboard.getBoard()[idx1][idx2];
@@ -248,15 +247,14 @@ const gameEngine = (() => {
   eventObserver.subscribe('players set', displayController.displayPlayerInfo) // Display plyer once player's are set
   
   //  TESTING
-  players.setPlayer1({name: 'Ben', symbol: 'X'})
-  players.setPlayer2({name: 'Emma', symbol: 'O'})
-  players.setBothPlayers();
-  displayController.activePlayer();
+  // players.setPlayer1({name: 'Ben', symbol: 'X'})
+  // players.setPlayer2({name: 'Emma', symbol: 'O'})
+  // players.setBothPlayers();
+  // displayController.activePlayer();
   // TESTING
   
   displayController.displayBoard();
 })()
 
-// UNCOUPLE STUFF
 // ADD AI
 // CLEAN UP MOBILE VIEW
