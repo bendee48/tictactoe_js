@@ -184,11 +184,11 @@ form input {
 }
 
 form legend {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
 }
 
 form input[type="text"] {
-  padding: .5rem;
+  padding: .8rem;
   border-radius: 3px;
 }
 
@@ -198,6 +198,7 @@ form input:focus {
 
 form input[type="submit"] {
   margin-top: 1rem;
+  padding: 1rem 3rem;
 } 
 
 /* Endgame Overlay */
@@ -242,11 +243,34 @@ form input[type="submit"] {
   .board {
     grid-column: 2 / -2;
   }
-  /* WEIRD SQUARE SIZING NEED TO FIX */
+  
+  .player1-info {
+    grid-column: 2 / 5;
+  }
+
+  .player2-info {
+    grid-column: 6 / 11;
+  }
 }
 
 @media (max-width: 500px) {
   .board {
     grid-row: 3 / -3;
+  }
+
+  .player-info {
+    font-size: 2rem;
+  }
+
+  .player1-info {
+    grid-column: 2 / 5;
+  }
+
+  .player2-info {
+    grid-column: 6 / 11;
+  }
+
+  .player-info p:last-child {
+    font-size: 4rem;
   }
 }
