@@ -257,4 +257,3 @@ const gameEngine = (() => {
 })()
 
 // ADD AI
-// CLEAN UP MOBILE VIEW

@@ -181,10 +181,11 @@ form input {
   border: none;
   outline: none;
   margin-bottom: 1rem;
+  font-size: 1.5rem;
 }
 
 form legend {
-  font-size: 0.9rem;
+  font-size: 1.3rem;
 }
 
 form input[type="text"] {
@@ -198,7 +199,7 @@ form input:focus {
 
 form input[type="submit"] {
   margin-top: 1rem;
-  padding: 1rem 3rem;
+  padding: .5rem 3rem;
 } 
 
 /* Endgame Overlay */
@@ -232,6 +233,11 @@ form input[type="submit"] {
   padding: 5rem;
 }
 
+.endgame-box button {
+  font-size: 1.2rem;
+  padding: 1.2rem 4rem;
+}
+
 .endgame-text {
   text-align: center;
   font-size: 2rem;
@@ -254,16 +260,18 @@ form input[type="submit"] {
 }
 
 @media (max-width: 500px) {
+  /* Board */
   .board {
     grid-row: 3 / -3;
   }
 
+  /* Player Info form */
   .player-info {
     font-size: 2rem;
   }
 
   .player1-info {
-    grid-column: 2 / 5;
+    grid-column: 1 / 5;
   }
 
   .player2-info {
@@ -272,5 +280,13 @@ form input[type="submit"] {
 
   .player-info p:last-child {
     font-size: 4rem;
+  }
+
+  .form-overlay > form {
+    padding: 3.5rem;
+  }
+
+  form input[type="text"] {
+    font-size: 1rem;
   }
 }
