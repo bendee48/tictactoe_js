@@ -1,4 +1,5 @@
-// Observer pattern to handle changes after event clicks 
+// Event Observer 
+// Observer pattern to handle changes after events/ changes 
 const eventObserver = (() => {
   let subscriptions = {};
 
@@ -19,6 +20,7 @@ const eventObserver = (() => {
   return { subscribe, subscriptions, run }
 })()
 
+// Tictactoe Board
 const gameboard = (() => {
   let board = [['', '', ''],['', '', ''],['', '', '']];
   
@@ -32,21 +34,23 @@ const gameboard = (() => {
   return { getBoard, resetBoard }
 })()
 
-const createPlayer = function({ name, symbol, number }) {
-  return { name, symbol, number }
+// Player Factory
+const createPlayer = function({ name, symbol, number, ai=false }) {
+  return { name, symbol, number, ai }
 }
- 
+
+// Players Module
 const players = (() => {
   let player1;
   let player2;
   let both;
   
-  const setPlayer1 = ({name, symbol}) => { 
+  const setPlayer1 = ({name, symbol, ai}) => { 
     player1 = createPlayer({name, symbol, number: 1});
   }
 
-  const setPlayer2 = ({name, symbol}) => { 
-    player2 = createPlayer({name, symbol, number: 2});
+  const setPlayer2 = ({name, symbol, ai}) => { 
+    player2 = createPlayer({name, symbol, number: 2, ai});
   }
 
   const getPlayer1 = () => {
@@ -103,12 +107,18 @@ const gameSetup = (() => {
   return { savePlayers, saveSinglePlayer }
 })();
 
+// Game Logic Module
 const gameLogic = (() => {
   let turns = 0;
 
-  const fillSquare = (e) => {
-    const coords = e.target.dataset.key;
-    let [idx1, idx2] = coords;
+  const fillSquare = (e, params) => {
+    let idx1, idx2;
+    let coords;
+
+    // Check if coords are from an event or provided via argument
+    coords = params ? params : e.target.dataset.key;
+    [idx1, idx2] = coords;
+
     if (gameboard.getBoard()[idx1][idx2] === '') {
       gameboard.getBoard()[idx1][idx2] = players.active().symbol;
       addToTurn();
@@ -122,9 +132,14 @@ const gameLogic = (() => {
     }
   }
 
+  const aiMove = () => {
+    if (players.active().ai) {
+      setTimeout(fillSquare, 1000, null, ai.selectSquare())
+    }
+  }
+
   const addToTurn = () => {
     turns++;
-    console.log(turns)
   }
 
   const isDraw = () => {
@@ -143,6 +158,7 @@ const gameLogic = (() => {
   }
 
   const checkWin = (coords, playerSymbol) => {
+    console.log({coords, playerSymbol})
     // object showing winning moves from that square, check only those
     const winRows = { '00': [['00', '01', '02'], ['00', '11', '22'], ['00', '10', '20']],
                       '01': [['00', '01', '02'], ['01', '11', '21']],
@@ -175,10 +191,31 @@ const gameLogic = (() => {
     elementSelector.endgameOverlay.classList.remove('open-endgame-overlay');
   }
 
-  return { fillSquare, hasWon, newGame, rematch, isDraw, hasDrawn }
+  return { fillSquare, hasWon, newGame, rematch, isDraw, hasDrawn, aiMove }
 })()
 
+// AI module for Computer moves
+const ai = (()=> {
+  // Very simple choose next available space
+  const selectSquare = () => {
+    const board = gameboard.getBoard();
+    let rowIndex;
+    let elementindex;
+  
+    for (let i = 0; i < board.length; i++) {
+      rowIndex = i;
+      elementIndex = board[i].indexOf("");
+      if (elementIndex >= 0) break;
+    }
 
+    // Return indexes at string
+    return `${rowIndex}${elementIndex}`;
+  }
+
+  return { selectSquare };
+})()
+
+// Element Selector fo HTML elements
 const elementSelector = (() => {
   const squares = document.querySelectorAll('.square');
   const twoPlayerForm = document.querySelector('#twoPlayerForm');
@@ -285,15 +322,19 @@ const gameEngine = (() => {
   eventObserver.subscribe('update board', displayController.activePlayer) // Show active player
   eventObserver.subscribe('update board', displayController.displayBoard) // Re-render board after each turn
   eventObserver.subscribe('players set', displayController.displayPlayerInfo) // Display plyer once player's are set
-  
+  eventObserver.subscribe('update board', gameLogic.aiMove) // Make move via Ai if playing vs computer
+
   //  TESTING
   // players.setPlayer1({name: 'Ben', symbol: 'X'})
   // players.setPlayer2({name: 'Emma', symbol: 'O'})
   // players.setBothPlayers();
   // displayController.activePlayer();
-  // TESTING
+  //  TESTING
   
   displayController.displayBoard();
 })()
 
-// ADD AI
+// Change win message "Emma wins"
+// Look at playerswitch after single player win on Rematch (does funny stuff)
+// Play computer move if it's the first player to move
+// Tidy up functions and css
