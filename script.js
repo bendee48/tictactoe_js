@@ -167,9 +167,14 @@ const gameLogic = (() => {
 
 const elementSelector = (() => {
   const squares = document.querySelectorAll('.square');
-  const playerForm = document.querySelector('#playerForm');
-  const formOverlay = document.querySelector('.form-overlay');
+  const twoPlayerForm = document.querySelector('#twoPlayerForm');
+  const singlePlayerForm = document.querySelector('#singlePlayerForm');
+  const startgameOverlay = document.querySelector('.startgame-overlay');
+  const twoPlayerFormOverlay = document.querySelector('.twoPlayerForm-overlay');
+  const singlePlayerFormOverlay = document.querySelector('.singlePlayerForm-overlay');
   const endgameOverlay = document.querySelector('.endgame-overlay');
+  const compBtn = document.querySelector('#comp-btn');
+  const friendBtn = document.querySelector('#friend-btn');
   const playBtn = document.querySelector('#play-btn');
   const rematchBtn = document.querySelector('#rematch-btn');
   const player1Info = document.querySelector('.player1-info');
@@ -178,27 +183,12 @@ const elementSelector = (() => {
   let player1Name;
   let player2Name;
   
-  return { squares, playerForm, formOverlay, endgameOverlay, playBtn, player1Info,
-           player2Info, endgameText, rematchBtn, player1Name, player2Name }
+  return { squares, twoPlayerForm, twoPlayerFormOverlay, endgameOverlay, playBtn, player1Info,
+           player2Info, endgameText, rematchBtn, player1Name, player2Name,
+           startgameOverlay, compBtn, friendBtn, singlePlayerFormOverlay, singlePlayerForm }
 })()
 
-
-const interactionListener = (() => {
-  // Board squares
-  elementSelector.squares.forEach(square => {
-    square.addEventListener('click', gameLogic.fillSquare);
-  });
-
-  // Player Form Submit
-  elementSelector.playerForm.addEventListener('submit', gameSetup.savePlayers);
-
-  // Play Again Btn
-  elementSelector.playBtn.addEventListener('click', gameLogic.newGame);
-
-  // Rematch Btn
-  elementSelector.rematchBtn.addEventListener('click', gameLogic.rematch);
-})()
-
+// Module for Displaying DOM elements
 const displayController = (() => {
   const displayBoard = () => {
     const squares = elementSelector.squares;
@@ -207,16 +197,16 @@ const displayController = (() => {
       square.innerHTML = gameboard.getBoard()[idx1][idx2];
     });
   }
-
+  
   const displayEndGame = (text, player) => {
     elementSelector.endgameOverlay.classList.add('open-endgame-overlay');
     elementSelector.endgameText.innerHTML = `${text} ${player || ""}`;
   }
-
+  
   const activePlayer = () => {
     elementSelector.player1Name = document.querySelector('.player1-name');
     elementSelector.player2Name = document.querySelector('.player2-name');
-
+    
     if (players.active().number === 1) {
       elementSelector.player1Name.classList.add('active-player');
       elementSelector.player2Name.classList.remove('active-player');
@@ -225,17 +215,53 @@ const displayController = (() => {
       elementSelector.player1Name.classList.remove('active-player');
     }
   }
-
+  
   const displayPlayerInfo = () => {
     elementSelector.player1Info.innerHTML = 
-      `<p class="player1-name">${players.getPlayer1().name}</p><p class="player1-symbol">${players.getPlayer1().symbol}</p>`
+    `<p class="player1-name">${players.getPlayer1().name}</p><p class="player1-symbol">${players.getPlayer1().symbol}</p>`
     elementSelector.player2Info.innerHTML = 
-      `<p class="player2-name">${players.getPlayer2().name}</p><p class="player2-symbol">${players.getPlayer2().symbol}</p>`
+    `<p class="player2-name">${players.getPlayer2().name}</p><p class="player2-symbol">${players.getPlayer2().symbol}</p>`
   }
   
-  return { displayBoard, displayEndGame, activePlayer, displayPlayerInfo }
+  const displayTwoPlayerForm = () => {
+    elementSelector.startgameOverlay.classList.add('close-overlay');
+    elementSelector.twoPlayerFormOverlay.classList.add('open-form-overlay');
+  }
+
+  const displaySinglePlayerForm = () => {
+    elementSelector.startgameOverlay.classList.add('close-overlay');
+    elementSelector.singlePlayerFormOverlay.classList.add('open-SinglePlayerForm-overlay');
+  }
+  
+  return { displayBoard, displayEndGame, activePlayer, displayPlayerInfo, displayTwoPlayerForm,
+           displaySinglePlayerForm }
 })()
 
+// Module for adding listener events
+const interactionListener = (() => {
+  // Board squares
+  elementSelector.squares.forEach(square => {
+    square.addEventListener('click', gameLogic.fillSquare);
+  });
+
+  // Selection of play vs friend
+  elementSelector.friendBtn.addEventListener('click', displayController.displayTwoPlayerForm);
+
+  // Selection of play vs comp
+  elementSelector.compBtn.addEventListener('click', displayController.displaySinglePlayerForm);
+
+  // Two Player Form Submit
+  elementSelector.twoPlayerForm.addEventListener('submit', gameSetup.savePlayers);
+
+  // Single Player Form Submit
+  elementSelector.singlePlayerForm.addEventListener('submit', gameSetup.saveSinglePlayer);
+
+  // Play Again Btn
+  elementSelector.playBtn.addEventListener('click', gameLogic.newGame);
+
+  // Rematch Btn
+  elementSelector.rematchBtn.addEventListener('click', gameLogic.rematch);
+})()
 
 const gameEngine = (() => {
   // Subscribe functions to Event Observer to be run later

@@ -12,7 +12,7 @@
       <h1>TicTacToe</h1>
     </header>
     <div class="player-info player1-info">
-      <p class="player1-name">Player1</p>
+      <p class="player1-name">Player 1</p>
       <p class="player1-symbol">X</p>
     </div>
     <div class="board">
@@ -30,8 +30,16 @@
       <p class="player2-name">Player 2</p>
       <p class="player2-symbol">O</p>
     </div>
-    <div class="form-overlay">
-      <form action="" id="playerForm">
+    <div class="overlay startgame-overlay">
+      <div class="overlay-box startgame-box">
+        <p class="overlay-text">Welcome to TicTacToe</p>
+        <p class="overlay-secondary-text">Select Game Mode</p>
+        <button class="btn" id="comp-btn">vs Computer</button>
+        <button class="btn" id="friend-btn">vs Friend</button>
+      </div>
+    </div>    
+    <div class="overlay twoPlayerForm-overlay">
+      <form action="" id="twoPlayerForm">
         <input type="text" name="player1" id="player1Name" maxlength="8" placeholder="Player 1 name" required></br>
         <fieldset>
           <legend>Choose Symbol</legend>
@@ -45,9 +53,23 @@
         <input type="submit" name="submit" value="Play" class="btn">
       </form>
     </div>
-    <div class="endgame-overlay">
-      <div class="endgame-box">
-        <p class="endgame-text"></p>
+    <div class="overlay singlePlayerForm-overlay">
+      <form action="" id="singlePlayerForm">
+        <input type="text" name="player1" id="player1Name" maxlength="8" placeholder="Player name" required></br>
+        <fieldset>
+          <legend>Choose Symbol</legend>
+          <input type="radio" id="X" name="symbol" value="X">
+          <label for="X">X</label>
+
+          <input type="radio" id="O" name="symbol" value="O" required>
+          <label for="O">O</label>
+        </fieldset>
+        <input type="submit" name="submit" value="Play" class="btn">
+      </form>
+    </div>
+    <div class="overlay endgame-overlay">
+      <div class="overlay-box">
+        <p class="overlay-text endgame-text"></p>
         <button class="btn" id="rematch-btn">Rematch?</button>
         <button class="btn" id="play-btn">New Game</button>
       </div>

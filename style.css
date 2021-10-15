@@ -150,9 +150,9 @@ header > h1 {
   background: rgba(255, 133, 33, 0.7);
 }
 
-/* Player Form */
+/* Overlay */
 
-.form-overlay {
+.overlay {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -165,11 +165,79 @@ header > h1 {
   z-index: 1;
 }
 
-.close-form {
+.overlay-box {
+  flex-basis: auto;
+  background-color: var(--bright-orange);
+  box-shadow: 4px 4px 4px 4px rgb(0, 0, 0, 0.2);
+  display: flex;
+  flex-flow: column;
+  gap: 2rem;
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+  padding: 5rem;
+}
+
+.overlay-box button {
+  text-align: center;
+  width: 90%;
+  font-size: 1.2rem;
+  padding: 1.2rem 2rem;
+}
+
+.overlay-box p {
+  text-align: center;
+}
+
+.overlay-text {
+  font-size: 2rem;
+}
+
+.overlay-secondary-text {
+  font-size: 1.5rem;
+}
+
+/* Start Game Overlay */
+
+.startgame-overlay {
+  display: flex;
+}
+
+.close-overlay {
   display: none;
 }
 
-.form-overlay > form {
+.startgame-box {
+
+}
+
+/* Endgame Overlay */
+
+.endgame-overlay {
+  display: none;
+}
+
+.open-endgame-overlay {
+  display: flex;
+}
+
+.endgame-box {
+
+}
+
+.endgame-box button {
+  /* font-size: 1.2rem;
+  padding: 1.2rem 4rem; */
+}
+
+.endgame-text {
+  /* text-align: center;
+  font-size: 2rem; */
+}
+
+/* Form general */
+
+form {
   background: var(--orange);
   border-radius: 4px;
   text-align: center;
@@ -202,45 +270,28 @@ form input[type="submit"] {
   padding: .5rem 3rem;
 } 
 
-/* Endgame Overlay */
+/* Single Player Form */
 
-.endgame-overlay {
+.singlePlayerForm-overlay {
   display: none;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  background: rgba(146, 95, 95, 0.5);
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  z-index: 1;
 }
 
-.open-endgame-overlay {
+.open-singlePlayerForm-Overlay {
   display: flex;
 }
 
-.endgame-box {
-  background-color: var(--bright-orange);
-  box-shadow: 4px 4px 4px 4px rgb(0, 0, 0, 0.2);
+/* Two Player Form */
+
+.twoPlayerForm-overlay {
+  display: none;
+}
+
+.open-form-overlay {
   display: flex;
-  flex-flow: column;
-  gap: 2rem;
-  border-radius: 5px;
-  justify-content: center;
-  align-items: center;
-  padding: 5rem;
 }
 
-.endgame-box button {
-  font-size: 1.2rem;
-  padding: 1.2rem 4rem;
-}
-
-.endgame-text {
-  text-align: center;
-  font-size: 2rem;
+.close-form {
+  display: none;
 }
 
 /* Meida Queries */
@@ -282,7 +333,7 @@ form input[type="submit"] {
     font-size: 4rem;
   }
 
-  .form-overlay > form {
+  .twoPlayerForm-overlay > form {
     padding: 3.5rem;
   }
 
