@@ -72,6 +72,7 @@ const players = (() => {
   return { getPlayer1, setPlayer1, setPlayer2, getPlayer2, active, switchPlayer, setBothPlayers }
 })()
 
+// Game Setup Module
 const gameSetup = (() => {
   const savePlayers = (e) => {
     e.preventDefault();
@@ -81,12 +82,25 @@ const gameSetup = (() => {
     players.setPlayer2({name: data.get('player2'), symbol: player2Sym});
     players.setBothPlayers();
     eventObserver.run('players set'); // Run functions attached to players being set
-    elementSelector.playerForm.reset;
-    elementSelector.formOverlay.classList.add('close-form');
+    elementSelector.twoPlayerForm.reset;
+    elementSelector.twoPlayerFormOverlay.classList.add('close-form');
     displayController.activePlayer(); //Set active player at start
   }
 
-  return { savePlayers }
+  const saveSinglePlayer = (e) => {
+    e.preventDefault();
+    const data = new FormData(e.target);
+    players.setPlayer1({name: data.get('player1'), symbol: data.get('symbol')});
+    let compSym = data.get('symbol') === 'O' ? 'X' : 'O';
+    players.setPlayer2({name: 'Computer', symbol: compSym, ai: true});
+    players.setBothPlayers();
+    eventObserver.run('players set'); // Run functions attached to players being set
+    elementSelector.singlePlayerForm.reset;
+    elementSelector.singlePlayerFormOverlay.classList.add('close-form');
+    displayController.activePlayer(); //Set active player at start
+  }
+
+  return { savePlayers, saveSinglePlayer }
 })();
 
 const gameLogic = (() => {
