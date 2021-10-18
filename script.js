@@ -110,6 +110,7 @@ const gameSetup = (() => {
 // Game Logic Module
 const gameLogic = (() => {
   let turns = 0;
+  let win = false;
 
   const fillSquare = (e, params) => {
     let idx1, idx2;
@@ -133,7 +134,7 @@ const gameLogic = (() => {
   }
 
   const aiMove = () => {
-    if (players.active().ai) {
+    if (players.active().ai && !win) { // !win check stops comp move after a player win
       setTimeout(fillSquare, 1000, null, ai.selectSquare())
     }
   }
@@ -153,12 +154,12 @@ const gameLogic = (() => {
   const hasWon = (coords, playerSymbol) => {
     if (checkWin(coords, playerSymbol)) {
       turns = 0; // Reset so as to not also trigger draw
+      win = true;
       displayController.displayEndGame("Congratulations! You win ", players.active().name);
     }
   }
 
   const checkWin = (coords, playerSymbol) => {
-    console.log({coords, playerSymbol})
     // object showing winning moves from that square, check only those
     const winRows = { '00': [['00', '01', '02'], ['00', '11', '22'], ['00', '10', '20']],
                       '01': [['00', '01', '02'], ['01', '11', '21']],
@@ -187,7 +188,9 @@ const gameLogic = (() => {
   const rematch = () => {
     gameboard.resetBoard();
     turns = 0;
+    win = false;
     displayController.displayBoard();
+    gameLogic.aiMove(); // Comp will move first if it's active
     elementSelector.endgameOverlay.classList.remove('open-endgame-overlay');
   }
 
@@ -320,7 +323,7 @@ const gameEngine = (() => {
   eventObserver.subscribe('check draw', gameLogic.hasDrawn) // Check for draw and display endgame
   eventObserver.subscribe('update board', players.switchPlayer); // Switch player after successful move
   eventObserver.subscribe('update board', displayController.activePlayer) // Show active player
-  eventObserver.subscribe('update board', displayController.displayBoard) // Re-render board after each turn
+  eventObserver.subscribe('update board', displayController.displayBoard) // Re-render board
   eventObserver.subscribe('players set', displayController.displayPlayerInfo) // Display plyer once player's are set
   eventObserver.subscribe('update board', gameLogic.aiMove) // Make move via Ai if playing vs computer
 
@@ -335,6 +338,4 @@ const gameEngine = (() => {
 })()
 
 // Change win message "Emma wins"
-// Look at playerswitch after single player win on Rematch (does funny stuff)
-// Play computer move if it's the first player to move
 // Tidy up functions and css
