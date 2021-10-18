@@ -83,28 +83,19 @@ const gameSetup = (() => {
     const data = new FormData(e.target);
     players.setPlayer1({name: data.get('player1'), symbol: data.get('symbol')});
     let player2Sym = data.get('symbol') === 'O' ? 'X' : 'O';
-    players.setPlayer2({name: data.get('player2'), symbol: player2Sym});
+    if (e.target.id === "singlePlayerForm") {
+      players.setPlayer2({name: 'Computer', symbol: player2Sym, ai: true});
+    } else {
+      players.setPlayer2({name: data.get('player2'), symbol: player2Sym});
+    }
     players.setBothPlayers();
     eventObserver.run('players set'); // Run functions attached to players being set
-    elementSelector.twoPlayerForm.reset;
-    elementSelector.twoPlayerFormOverlay.classList.add('close-form');
+    e.target.reset();
+    e.target.parentNode.classList.add('close-form'); // Close form overlay
     displayController.activePlayer(); //Set active player at start
   }
 
-  const saveSinglePlayer = (e) => {
-    e.preventDefault();
-    const data = new FormData(e.target);
-    players.setPlayer1({name: data.get('player1'), symbol: data.get('symbol')});
-    let compSym = data.get('symbol') === 'O' ? 'X' : 'O';
-    players.setPlayer2({name: 'Computer', symbol: compSym, ai: true});
-    players.setBothPlayers();
-    eventObserver.run('players set'); // Run functions attached to players being set
-    elementSelector.singlePlayerForm.reset;
-    elementSelector.singlePlayerFormOverlay.classList.add('close-form');
-    displayController.activePlayer(); //Set active player at start
-  }
-
-  return { savePlayers, saveSinglePlayer }
+  return { savePlayers }
 })();
 
 // Game Logic Module
@@ -190,8 +181,8 @@ const gameLogic = (() => {
     turns = 0;
     win = false;
     displayController.displayBoard();
-    gameLogic.aiMove(); // Comp will move first if it's active
     elementSelector.endgameOverlay.classList.remove('open-endgame-overlay');
+    gameLogic.aiMove(); // Comp will move first if it's active
   }
 
   return { fillSquare, hasWon, newGame, rematch, isDraw, hasDrawn, aiMove }
@@ -308,7 +299,7 @@ const interactionListener = (() => {
   elementSelector.twoPlayerForm.addEventListener('submit', gameSetup.savePlayers);
 
   // Single Player Form Submit
-  elementSelector.singlePlayerForm.addEventListener('submit', gameSetup.saveSinglePlayer);
+  elementSelector.singlePlayerForm.addEventListener('submit', gameSetup.savePlayers);
 
   // Play Again Btn
   elementSelector.playBtn.addEventListener('click', gameLogic.newGame);
