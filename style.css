@@ -207,10 +207,6 @@ header > h1 {
   display: none;
 }
 
-.startgame-box {
-
-}
-
 /* Endgame Overlay */
 
 .endgame-overlay {
@@ -219,20 +215,6 @@ header > h1 {
 
 .open-endgame-overlay {
   display: flex;
-}
-
-.endgame-box {
-
-}
-
-.endgame-box button {
-  /* font-size: 1.2rem;
-  padding: 1.2rem 4rem; */
-}
-
-.endgame-text {
-  /* text-align: center;
-  font-size: 2rem; */
 }
 
 /* Form general */
