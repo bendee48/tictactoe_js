@@ -116,7 +116,7 @@ const gameLogic = (() => {
       addToTurn();
       // Run functions signed up to Check win, Check Draw and Update Board
       // Save a little time (don't need to check win before 5 moves)
-      if (turns > 4) eventObserver.run('check win', coords, players.active().symbol);
+      if (turns > 4) eventObserver.run('check win', gameboard.getBoard(), players.active().symbol);
       eventObserver.run('update board');
       eventObserver.run('check draw');
     } else {
@@ -142,26 +142,30 @@ const gameLogic = (() => {
     if (isDraw()) displayController.displayEndGame("It was a draw.");
   }
 
-  const hasWon = (coords, playerSymbol) => {
-    if (checkWin(coords, playerSymbol)) {
+  const hasWon = (board, playerSymbol) => {
+    if (checkWin(board, playerSymbol)) {
       turns = 0; // Reset so as to not also trigger draw
       win = true;
       displayController.displayEndGame("Congratulations! You win ", players.active().name);
     }
   }
 
-  const checkWin = (coords, playerSymbol) => {
-    // object showing winning moves from that square, check only those
-    const winRows = { '00': [['00', '01', '02'], ['00', '11', '22'], ['00', '10', '20']],
-                      '01': [['00', '01', '02'], ['01', '11', '21']],
-                      '02': [['00', '01', '02'], ['02', '11', '20'], ['02', '12', '22']],
-                      '10': [['00', '10', '20'], ['10', '11', '12'],],
-                      '11': [['00', '11', '22'], ['02', '11', '20'], ['10', '11', '12'], ['01', '11', '21']],
-                      '12': [['10', '11', '12'], ['02', '12', '22']],
-                      '20': [['00', '10', '20'], ['02', '11', '20'], ['20', '21', '22']],
-                      '21': [['01', '11', '21'], ['20', '21', '22']],
-                      '22': [['00', '11', '22'], ['20', '21', '22'], ['02', '12', '22']] };
-    const board = gameboard.getBoard();
+  const checkWin = (board, player) => {
+    if (
+        (board[0][0] == player && board[0][1] == player && board[0][2] == player) ||
+        (board[1][0] == player && board[1][1] == player && board[1][2] == player) ||
+        (board[2][0] == player && board[2][1] == player && board[2][2] == player) ||
+        (board[0][0] == player && board[1][0] == player && board[2][0] == player) ||
+        (board[0][1] == player && board[1][1] == player && board[2][1] == player) ||
+        (board[0][2] == player && board[1][2] == player && board[2][2] == player) ||
+        (board[0][0] == player && board[1][1] == player && board[2][2] == player) ||
+        (board[0][2] == player && board[1][1] == player && board[2][0] == player)
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+  }
 
     // Check possible winning rows for active player's mark 
     return winRows[coords].some(row => {
