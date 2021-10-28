@@ -157,7 +157,7 @@ const gameLogic = (() => {
         mode = ai.unbeatable(gameboard.getBoard(), players.active().symbol);
       }
       // Pass enableBoard as a callback to turn board back on
-      setTimeout(fillSquare, 1500, null, mode, displayController.enableBoard)
+      setTimeout(fillSquare, 1350, null, mode, displayController.enableBoard)
     }
   }
 
@@ -447,7 +447,6 @@ const gameEngine = (() => {
   displayController.displayBoard();
 })()
 
-// Remove ability to click when computer is moving
-// KEEP simple as easisest, random as easy, minimax as hard
-// Add menu options for difficulty 
-// Add home button on menus
+// highlight winng squares
+// form colour/ opacity
+// update readme
