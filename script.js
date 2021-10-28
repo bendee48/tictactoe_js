@@ -88,11 +88,22 @@ const gameSetup = (() => {
     } else {
       players.setPlayer2({name: data.get('player2'), symbol: player2Sym});
     }
+    _setDifficulty(data.get('difficulty'));
     players.setBothPlayers();
     eventObserver.run('players set'); // Run functions attached to players being set
     e.target.reset();
     e.target.parentNode.classList.add('close-form'); // Close form overlay
     displayController.activePlayer(); //Set active player at start
+  }
+
+  const _setDifficulty = (difficulty) => {
+    if (difficulty === 'laura mode') {
+      gameLogic.setDifficulty('laura mode');
+    } else if (difficulty === 'easy') {
+      gameLogic.setDifficulty('easy');
+    } else if (difficulty === 'hard') {
+      gameLogic.setDifficulty('hard');
+    }
   }
 
   return { savePlayers }
@@ -102,6 +113,15 @@ const gameSetup = (() => {
 const gameLogic = (() => {
   let turns = 0;
   let win = false;
+  let difficulty;
+
+  const setDifficulty = (newDifficulty) => {
+    difficulty = newDifficulty;
+  }
+
+  const getDifficulty = () => {
+    return difficulty;
+  }
 
   const fillSquare = (e, params) => {
     let idx1, idx2;
@@ -125,8 +145,16 @@ const gameLogic = (() => {
   }
 
   const aiMove = () => {
-    if (players.active().ai && !win) { // !win check stops comp move after a player win
-      setTimeout(fillSquare, 1000, null, ai.selectSquare())
+    if (players.active().ai && turns < 9 && !win) { // !win check stops comp move after a player win
+      let mode;
+      if (getDifficulty() === 'laura mode') {
+        mode = ai.lauraMode();
+      } else if (getDifficulty() === 'easy') {
+        mode = ai.easy();
+      } else if (getDifficulty() === 'hard') {
+        mode = ai.unbeatable(gameboard.getBoard(), players.active().symbol);
+      }
+      setTimeout(fillSquare, 1000, null, mode)
     }
   }
 
@@ -167,13 +195,14 @@ const gameLogic = (() => {
       }
   }
 
-    // Check possible winning rows for active player's mark 
-    return winRows[coords].some(row => {
-      return row.every(coord => {
-        let [idx1, idx2] = coord;
-        return board[idx1][idx2] === playerSymbol;
-      });
+  const availableSquares = (board) => {
+    let spaces = [];
+    board.forEach((row, idx1) => {
+      row.forEach((sq, idx2) => {
+        if (sq === "") spaces.push(`${idx1}${idx2}`);
+      })
     });
+    return spaces;
   }
 
   const newGame = () => {
@@ -189,13 +218,14 @@ const gameLogic = (() => {
     gameLogic.aiMove(); // Comp will move first if it's active
   }
 
-  return { fillSquare, hasWon, newGame, rematch, isDraw, hasDrawn, aiMove }
+  return { fillSquare, hasWon, newGame, rematch, isDraw, hasDrawn, aiMove, checkWin, availableSquares,
+           setDifficulty, getDifficulty }
 })()
 
 // AI module for Computer moves
 const ai = (()=> {
-  // Very simple choose next available space
-  const selectSquare = () => {
+  // Very simple, choose next available space
+  const lauraMode = () => {
     const board = gameboard.getBoard();
     let rowIndex;
     let elementindex;
@@ -206,11 +236,80 @@ const ai = (()=> {
       if (elementIndex >= 0) break;
     }
 
-    // Return indexes at string
+    // Return indices as string
     return `${rowIndex}${elementIndex}`;
   }
 
-  return { selectSquare };
+  const easy = () => {
+    const board = gameboard.getBoard();
+    let spaces = gameLogic.availableSquares(board);
+    return spaces[Math.floor(Math.random() * spaces.length)];
+  }
+
+  const unbeatable = (board, playerSym) => {
+    return minimax(board, playerSym).index;
+  }
+  
+  // Minimax for unbeatable AI
+  const minimax = (board, playerSym) => {
+    // debugger
+    let aiPlayer = players.getPlayer2().symbol;  //MEMOIZE
+    let huPlayer = players.getPlayer1().symbol;  //MEMOIZE
+    let squares = gameLogic.availableSquares(board);
+
+    if (gameLogic.checkWin(board, aiPlayer)) {
+      return { score: 1 }
+    } else if (gameLogic.checkWin(board, huPlayer)) {
+      return { score: -1 }
+    } else if (squares.length === 0) {
+      return { score: 0 };
+    }
+
+    let moves = [];
+    // Move through availables spaces and call minimax again on updated board
+    squares.forEach(sq => {
+      let move = {};
+      move.index = sq;
+      let [idx1, idx2] = sq;
+      board[idx1][idx2] = playerSym;
+
+      if (playerSym === aiPlayer) {
+        let result = minimax(board, huPlayer)
+        move.score = result.score;
+      } else {
+        let result = minimax(board, aiPlayer)
+        move.score = result.score;
+      }
+      // Reset baord at the end
+      board[idx1][idx2] = "";
+      moves.push(move);
+    });
+
+    let bestMove;
+    // Choose highest score for ai player
+    if (playerSym === aiPlayer){
+      var bestScore = -10000;
+      for (var i = 0; i < moves.length; i++) {
+        if (moves[i].score > bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    } else {
+      // and lowest score for human player
+      var bestScore = 10000;
+      for (var i = 0; i < moves.length; i++) {
+        if (moves[i].score < bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    }
+
+    return moves[bestMove];
+  }
+
+  return { lauraMode, unbeatable, easy };
 })()
 
 // Element Selector fo HTML elements
@@ -332,5 +431,7 @@ const gameEngine = (() => {
   displayController.displayBoard();
 })()
 
-// Change win message "Emma wins"
-// Tidy up functions and css
+// Easy mode - return all open spots select one at random (maybe?)
+// Remove ability to click when computer is moving
+// KEEP simple as easisest, random as easy, minimax as hard
+// Add menu options for difficulty 
