@@ -30,6 +30,7 @@ const gameboard = (() => {
 
   const resetBoard = () => {
     board = [['', '', ''],['', '', ''],['', '', '']];
+    displayController.colourSquares();
   }
   return { getBoard, resetBoard }
 })()
@@ -174,28 +175,36 @@ const gameLogic = (() => {
   }
 
   const hasWon = (board, playerSymbol) => {
-    if (checkWin(board, playerSymbol)) {
-      turns = 0; // Reset so as to not also trigger draw
+    let result = checkWin(board, playerSymbol);
+
+    if (result) {
+      displayController.colourWinners(result);
+      turns = 0;
       win = true;
-      displayController.displayEndGame("Congratulations! You win ", players.active().name);
+      setTimeout(displayController.displayEndGame, 2000, "Congratulations! You win ", players.active().name)
     }
   }
 
   const checkWin = (board, player) => {
-    if (
-        (board[0][0] == player && board[0][1] == player && board[0][2] == player) ||
-        (board[1][0] == player && board[1][1] == player && board[1][2] == player) ||
-        (board[2][0] == player && board[2][1] == player && board[2][2] == player) ||
-        (board[0][0] == player && board[1][0] == player && board[2][0] == player) ||
-        (board[0][1] == player && board[1][1] == player && board[2][1] == player) ||
-        (board[0][2] == player && board[1][2] == player && board[2][2] == player) ||
-        (board[0][0] == player && board[1][1] == player && board[2][2] == player) ||
-        (board[0][2] == player && board[1][1] == player && board[2][0] == player)
-      ) {
-        return true;
-      } else {
-        return false;
-      }
+    if (board[0][0] == player && board[0][1] == player && board[0][2] == player) {
+      return [0,1,2];
+    } else if (board[1][0] == player && board[1][1] == player && board[1][2] == player) {
+      return [3,4,5];
+    } else if (board[2][0] == player && board[2][1] == player && board[2][2] == player) {
+      return [6,7,8];
+    } else if (board[0][0] == player && board[1][0] == player && board[2][0] == player) {
+      return [0,3,6];
+    } else if (board[0][1] == player && board[1][1] == player && board[2][1] == player) {
+      return [1,4,7];
+    } else if (board[0][2] == player && board[1][2] == player && board[2][2] == player) {
+      return [2,5,8];
+    } else if (board[0][0] == player && board[1][1] == player && board[2][2] == player) {
+      return [0,4,8];
+    } else if (board[0][2] == player && board[1][1] == player && board[2][0] == player) {
+      return [2,4,6];
+    } else {
+      return false;
+    }
   }
 
   const availableSquares = (board) => {
@@ -395,9 +404,22 @@ const displayController = (() => {
       sq.style.pointerEvents = "auto";
     });
   }
+
+  const colourWinners = (result) => {
+    let squares = Array.from(elementSelector.squares);
+    result.forEach(num => {
+      squares[num].style.background = "var(--bright-orange)";
+    })
+  }
+
+  const colourSquares = () => {
+    elementSelector.squares.forEach(sq => {
+      sq.style.background = "var(--orange)";
+    })
+  }
   
   return { displayBoard, displayEndGame, activePlayer, displayPlayerInfo, displayTwoPlayerForm,
-           displaySinglePlayerForm, disableBoard, enableBoard }
+           displaySinglePlayerForm, disableBoard, enableBoard, colourWinners, colourSquares }
 })()
 
 // Module for adding listener events
@@ -447,4 +469,4 @@ const gameEngine = (() => {
   displayController.displayBoard();
 })()
 
-// update readme
+// active player switches too quickly
