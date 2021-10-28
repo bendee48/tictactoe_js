@@ -124,6 +124,10 @@ const gameLogic = (() => {
     return difficulty;
   }
 
+  const getWinStatus = () => {
+    return win;
+  }
+
   const fillSquare = (e, params, callback) => {
     let idx1, idx2;
     let coords;
@@ -226,12 +230,13 @@ const gameLogic = (() => {
     turns = 0;
     win = false;
     displayController.displayBoard();
+    displayController.activePlayer();
     elementSelector.endgameOverlay.classList.remove('open-endgame-overlay');
     gameLogic.aiMove(); // Comp will move first if it's active
   }
 
   return { fillSquare, hasWon, newGame, rematch, isDraw, hasDrawn, aiMove, checkWin, availableSquares,
-           setDifficulty, getDifficulty }
+           setDifficulty, getDifficulty, getWinStatus }
 })()
 
 // AI module for Computer moves
@@ -364,15 +369,17 @@ const displayController = (() => {
   }
   
   const activePlayer = () => {
-    elementSelector.player1Name = document.querySelector('.player1-name');
-    elementSelector.player2Name = document.querySelector('.player2-name');
-    
-    if (players.active().number === 1) {
-      elementSelector.player1Name.classList.add('active-player');
-      elementSelector.player2Name.classList.remove('active-player');
-    } else {
-      elementSelector.player2Name.classList.add('active-player');
-      elementSelector.player1Name.classList.remove('active-player');
+    if (!gameLogic.getWinStatus()) { // Don't update immediately at end game
+      elementSelector.player1Name = document.querySelector('.player1-name');
+      elementSelector.player2Name = document.querySelector('.player2-name');
+
+      if (players.active().number === 1) {
+        elementSelector.player1Name.classList.add('active-player');
+        elementSelector.player2Name.classList.remove('active-player');
+      } else {
+        elementSelector.player2Name.classList.add('active-player');
+        elementSelector.player1Name.classList.remove('active-player');
+      }
     }
   }
   
@@ -468,5 +475,3 @@ const gameEngine = (() => {
   
   displayController.displayBoard();
 })()
-
-// active player switches too quickly
