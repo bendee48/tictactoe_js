@@ -6,7 +6,8 @@ Making TicTacToe (via the [Odin Project](https://www.theodinproject.com/paths/fu
 
 ### Features
   - Standard TicTacToe
-  - 2 player
+  - AI
+  - 2 player local
 
 ### Objectives of Project
   - Looking at Design patterns and code structure
@@ -14,6 +15,8 @@ Making TicTacToe (via the [Odin Project](https://www.theodinproject.com/paths/fu
   - Utilise Factories
   - Modular code without use of globals
   - Implement the Observer pattern
+  - Implementing AI
+    - Utilising the minimax algorithm for an unbeatable AI
 
 ### Built with
   - HTML

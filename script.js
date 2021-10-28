@@ -447,6 +447,4 @@ const gameEngine = (() => {
   displayController.displayBoard();
 })()
 
-// highlight winng squares
-// form colour/ opacity
 // update readme
