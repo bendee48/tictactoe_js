@@ -123,7 +123,7 @@ const gameLogic = (() => {
     return difficulty;
   }
 
-  const fillSquare = (e, params) => {
+  const fillSquare = (e, params, callback) => {
     let idx1, idx2;
     let coords;
 
@@ -139,6 +139,7 @@ const gameLogic = (() => {
       if (turns > 4) eventObserver.run('check win', gameboard.getBoard(), players.active().symbol);
       eventObserver.run('update board');
       eventObserver.run('check draw');
+      if (callback) callback();
     } else {
       return;
     }
@@ -146,6 +147,7 @@ const gameLogic = (() => {
 
   const aiMove = () => {
     if (players.active().ai && turns < 9 && !win) { // !win check stops comp move after a player win
+      eventObserver.run('disable board');
       let mode;
       if (getDifficulty() === 'laura mode') {
         mode = ai.lauraMode();
@@ -154,7 +156,8 @@ const gameLogic = (() => {
       } else if (getDifficulty() === 'hard') {
         mode = ai.unbeatable(gameboard.getBoard(), players.active().symbol);
       }
-      setTimeout(fillSquare, 1000, null, mode)
+      // Pass enableBoard as a callback to turn board back on
+      setTimeout(fillSquare, 1500, null, mode, displayController.enableBoard)
     }
   }
 
@@ -380,9 +383,21 @@ const displayController = (() => {
     elementSelector.startgameOverlay.classList.add('close-overlay');
     elementSelector.singlePlayerFormOverlay.classList.add('open-SinglePlayerForm-overlay');
   }
+
+  const disableBoard = () => {
+    elementSelector.squares.forEach(sq => {
+      sq.style.pointerEvents = "None";
+    });
+  }
+
+  const enableBoard = () => {
+    elementSelector.squares.forEach(sq => {
+      sq.style.pointerEvents = "auto";
+    });
+  }
   
   return { displayBoard, displayEndGame, activePlayer, displayPlayerInfo, displayTwoPlayerForm,
-           displaySinglePlayerForm }
+           displaySinglePlayerForm, disableBoard, enableBoard }
 })()
 
 // Module for adding listener events
@@ -420,6 +435,7 @@ const gameEngine = (() => {
   eventObserver.subscribe('update board', displayController.displayBoard) // Re-render board
   eventObserver.subscribe('players set', displayController.displayPlayerInfo) // Display plyer once player's are set
   eventObserver.subscribe('update board', gameLogic.aiMove) // Make move via Ai if playing vs computer
+  eventObserver.subscribe('disable board', displayController.disableBoard) // Disable board on AI's turn
 
   //  TESTING
   // players.setPlayer1({name: 'Ben', symbol: 'X'})
@@ -431,7 +447,7 @@ const gameEngine = (() => {
   displayController.displayBoard();
 })()
 
-// Easy mode - return all open spots select one at random (maybe?)
 // Remove ability to click when computer is moving
 // KEEP simple as easisest, random as easy, minimax as hard
 // Add menu options for difficulty 
+// Add home button on menus
