@@ -235,7 +235,12 @@ form input {
 }
 
 form legend {
+  margin-bottom: .3rem;
   font-size: 1.3rem;
+}
+
+form select {
+  font-size: 1.1rem;
 }
 
 form input[type="text"] {
