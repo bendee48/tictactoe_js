@@ -144,6 +144,11 @@ header > h1 {
   align-items: center;
   background: var(--orange);
   font-size: 5em;
+  cursor: pointer;
+}
+
+.winner-square {
+  background: var(--bright-orange);
 }
 
 .square:hover {

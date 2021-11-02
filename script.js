@@ -415,13 +415,13 @@ const displayController = (() => {
   const colourWinners = (result) => {
     let squares = Array.from(elementSelector.squares);
     result.forEach(num => {
-      squares[num].style.background = "var(--bright-orange)";
+      squares[num].classList.add('winner-square');
     })
   }
 
   const colourSquares = () => {
     elementSelector.squares.forEach(sq => {
-      sq.style.background = "var(--orange)";
+      sq.classList.remove('winner-square');
     })
   }
   
