@@ -324,6 +324,12 @@ form input[type="submit"] {
     grid-row: 3 / -3;
   }
 
+  /* Overlay Box */
+
+  .overlay-box {
+    padding: 3rem 2rem;
+  }
+
   /* Player Info form */
   .player-info {
     font-size: 2rem;
@@ -342,7 +348,7 @@ form input[type="submit"] {
   }
 
   form {
-    padding: 3.5rem 3.5rem 2rem 3.5rem;
+    padding: 3.5rem 2.5rem 2rem 2.5rem;
   }
 
   form input[type="text"] {
