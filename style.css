@@ -180,7 +180,8 @@ header > h1 {
   border-radius: 5px;
   justify-content: center;
   align-items: center;
-  padding: 5rem;
+  padding: 4rem;
+  margin: 0 15px;
 }
 
 .overlay-box button {
