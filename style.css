@@ -38,24 +38,24 @@ ol, ul {
 /* Main Styling */
 
 :root {
-  --orange: rgb(255, 144, 17);
-  --bright-orange: rgb(255, 90, 13);
+  --orange: rgb(255,144,17);
+  --bright-orange: rgb(255,90,13);
 }
 
 body {
-  background: rgb(253, 225, 201);
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  background: rgb(253,225,201);
 }
 
 .page-content {
-  height: 100vh;
   display: grid;
+  height: 100vh;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
 }
 
 .btn {
-  padding: 0.5rem 3rem;
+  padding: .5rem 3rem;
   border-radius: 3px;
   color: white;
   border: none;
@@ -64,15 +64,13 @@ body {
   cursor: pointer;
 }
 
-.btn:hover {
-  background: rgb(39, 39, 39);
-}
+.btn:hover { background: rgb(39,39,39); }
 
 /* Header */
 
 .page-header {
-  grid-column: 1 / -1;
   display: flex;
+  grid-column: 1 / -1;
   justify-content: center;
   align-items: center;
   padding: 1rem 0;
@@ -91,13 +89,9 @@ header > h1 {
   margin-top: 1rem;
 }
 
-.player1-info {
-  grid-column: 1 / 4;
-}
+.player1-info { grid-column: 1 / 4; }
 
-.player2-info {
-  grid-column: 8 / -1;
-}
+.player2-info { grid-column: 8 / -1; }
 
 .player-info p:first-child {
   display: inline-block;
@@ -105,83 +99,75 @@ header > h1 {
   border-radius: 5px;
 }
 
-.player-info p:last-child {
-  font-size: 7rem;
-}
+.player-info p:last-child { font-size: 7rem; }
 
 .player-info p.active-player + p {
   animation-duration: 1.5s;
   animation-name: shakeit;
   animation-iteration-count: infinite;
-  animation-timing-function: cubic-bezier(0.5, 0.8, 0.355, 1);
+  animation-timing-function: cubic-bezier(.5, .8, .355, 1);
 }
 
 @keyframes shakeit {
   to {
-    transform: scale(0.9);
+    transform: scale(.9);
   }
 }
 
-.active-player {
-  background: var(--bright-orange);
-}
+.active-player { background: var(--bright-orange); }
 
 /*Board*/
 
 .board {
-  background: #000;
   grid-column: 4 / -4;
   grid-row: 2 / -2;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
   gap: 15px;
+  background: #000;
 }
 
 .square {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--orange);
   font-size: 5em;
+  background: var(--orange);
   cursor: pointer;
 }
 
-.winner-square {
-  background: var(--bright-orange);
-}
+.winner-square { background: var(--bright-orange); }
 
-.square:hover {
-  background: rgba(255, 133, 33, 0.7);
-}
+.square:hover { background: rgba(255,133,33,.7); }
 
 /* Overlay */
 
 .overlay {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: fixed;
-  background: rgba(56, 56, 56, 0.9);
   top: 0;
   bottom: 0;
   right: 0;
   left: 0;
   z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(56,56,56,.9);
 }
 
 .overlay-box {
   flex-basis: auto;
-  background-color: var(--bright-orange);
-  box-shadow: 4px 4px 4px 4px rgb(0, 0, 0, 0.2);
   display: flex;
   flex-flow: column;
   gap: 2rem;
-  border-radius: 5px;
   justify-content: center;
   align-items: center;
   padding: 4rem;
   margin: 0 15px;
+  border-radius: 5px;
+  box-shadow: 4px 4px 4px 4px rgb(0,0,0,.2);
+  background-color: var(--bright-orange);
 }
 
 .overlay-box button {
@@ -191,67 +177,47 @@ header > h1 {
   padding: 1.2rem 2rem;
 }
 
-.overlay-box p {
-  text-align: center;
-}
+.overlay-box p { text-align: center; }
 
-.overlay-text {
-  font-size: 2rem;
-}
+.overlay-text { font-size: 2rem; }
 
-.overlay-secondary-text {
-  font-size: 1.5rem;
-}
+.overlay-secondary-text { font-size: 1.5rem; }
 
 /* Start Game Overlay */
 
-.startgame-overlay {
-  display: flex;
-}
+.startgame-overlay { display: flex; }
 
-.close-overlay {
-  display: none;
-}
+.close-overlay { display: none; }
 
 /* Endgame Overlay */
 
-.endgame-overlay {
-  display: none;
-}
+.endgame-overlay { display: none; }
 
-.open-endgame-overlay {
-  display: flex;
-}
+.open-endgame-overlay { display: flex; }
 
 
 /* Form general */
 
 form {
-  background: var(--orange);
-  border-radius: 4px;
-  text-align: center;
-  box-shadow: 2px 2px 8px 2px rgba(0, 0, 0, 0.5);
   padding: 5rem 5rem 2rem 5rem;
+  text-align: center;
+  box-shadow: 2px 2px 8px 2px rgba(0,0,0,.5);
+  border-radius: 4px;
+  background: var(--orange);
 }
 
-form a {
-  display: block;
-}
+form a { display: block; }
 
 form a:link, 
-form a:visited {
-  color: black;
-}
+form a:visited { color: black; }
 
-form a:active {
-  color: white;
-}
+form a:active { color: white; }
 
 form input {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
   border: none;
   outline: none;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
 }
 
 form legend {
@@ -259,18 +225,14 @@ form legend {
   font-size: 1.3rem;
 }
 
-form select {
-  font-size: 1.1rem;
-}
+form select { font-size: 1.1rem; }
 
 form input[type="text"] {
   padding: .8rem;
   border-radius: 3px;
 }
 
-form input:focus {
-  box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.4);
-}
+form input:focus { box-shadow: 0 0 4px 4px rgba(0,0,0,.4); }
 
 form input[type="submit"] {
   margin-top: 2rem;
@@ -280,78 +242,46 @@ form input[type="submit"] {
 
 /* Single Player Form */
 
-.singlePlayerForm-overlay {
-  display: none;
-}
+.singlePlayerForm-overlay { display: none; }
 
-.open-singlePlayerForm-Overlay {
-  display: flex;
-}
+.open-singlePlayerForm-Overlay { display: flex; }
 
 /* Two Player Form */
 
-.twoPlayerForm-overlay {
-  display: none;
-}
+.twoPlayerForm-overlay { display: none; }
 
-.open-form-overlay {
-  display: flex;
-}
+.open-form-overlay { display: flex; }
 
-.close-form {
-  display: none;
-}
+.close-form { display: none; }
 
 /* Meida Queries */
 
 @media (max-width: 900px) {
-  .board {
-    grid-column: 2 / -2;
-  }
+  .board { grid-column: 2 / -2; }
   
-  .player1-info {
-    grid-column: 2 / 5;
-  }
+  .player1-info { grid-column: 2 / 5; }
 
-  .player2-info {
-    grid-column: 6 / 11;
-  }
+  .player2-info { grid-column: 6 / 11; }
 }
 
 @media (max-width: 500px) {
   /* Board */
-  .board {
-    grid-row: 3 / -3;
-  }
+  .board { grid-row: 3 / -3; }
 
   /* Overlay Box */
-
-  .overlay-box {
-    padding: 3rem 2rem;
-  }
+  .overlay-box { padding: 3rem 2rem; }
 
   /* Player Info form */
-  .player-info {
-    font-size: 2rem;
-  }
+  .player-info { font-size: 2rem; }
 
-  .player1-info {
-    grid-column: 1 / 5;
-  }
+  .player1-info { grid-column: 1 / 5; }
 
-  .player2-info {
-    grid-column: 6 / 11;
-  }
+  .player2-info { grid-column: 6 / 11; }
 
-  .player-info p:last-child {
-    font-size: 4rem;
-  }
+  .player-info p:last-child { font-size: 4rem; }
 
-  form {
-    padding: 3.5rem 2.5rem 2rem 2.5rem;
-  }
+  /* Form */
+  form { padding: 3.5rem 2.5rem 2rem 2.5rem; }
 
-  form input[type="text"] {
-    font-size: 1rem;
-  }
+  form input[type="text"] { font-size: 1rem; }
 }
